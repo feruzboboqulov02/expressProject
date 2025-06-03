@@ -1,18 +1,27 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const postmodel = require('./models/post.model.js');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-const PORT = 8080
-app.get("/",(req,res)=>{
-    //res.send("Hello World");
-    res.status(200).send({message: "Hello World"});
+app.get("/",async (req,res)=>{
+    try {
+        const allPosts = await postmodel.find();
+        res.status(200).json(allPosts);
+    } catch (error) {
+        res.status(500).json({error: "Internal Server Error"});
+    } 
 })
-app.post("/",(req,res)=>{
-    console.log((req.body));
-    const {firstname, lastName} = req.body;
-    const message = `his full name is ${firstname} ${lastName}`;
-    res.send(message);
-    
+app.post("/",async (req,res)=>{
+    try {
+        const {title, body} = req.body;
+        const newPost = await postmodel.create({title, body})
+        res.status(201).json(newPost);
+    } catch (error) {
+        res.status(500).json({error: "Internal Server Error"});
+    }
+
 })
 
 app.delete("/:id",(req,res)=>{
@@ -26,4 +35,17 @@ app.put("/:id",(req,res)=>{
     res.json({id,body})
 })
 
-app.listen(PORT,()=>{console.log(`Server is running on port ${PORT}`)});
+const PORT =process.env.PORT || 8080;
+
+
+
+const bootstrsap =async ()=>{
+    try{ 
+        await mongoose.connect(process.env.DB_URL).then(() => {console.log("Connected to MongoDB")});
+        app.listen(PORT,()=>{console.log(`Server is running on port ${PORT}`)});
+    }catch(error){
+        console.log(`Error connecting to the database: ${error.message}`);
+        
+    }
+}
+bootstrsap();
