@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const postmodel = require('./models/post.model.js');
 require('dotenv').config();
 const fileupload = require('express-fileupload');
+const requestTime = require('./middlewares/request-time');
 
 const postRoute = require('./router/post.route.js');
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.static('static'))
 app.use(express.json());
 app.use(fileupload({}))
 app.use('/api/post',postRoute)
+app.use(requestTime);
 
 // app.get("/",)
 

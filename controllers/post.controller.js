@@ -4,6 +4,7 @@ const postService = require('../server/post.service');
 class postController {  
     async getAll(req,res){
         try {
+                console.log("Request Time:", req.requestTime);
                 const allPosts = await postService.getAll();
                 res.status(200).json(allPosts);
             }   catch (error) {
@@ -12,6 +13,7 @@ class postController {
     }
     async create(req, res){
         try {
+
             const post = await postService.create(req.body,req.files.picture);
             res.status(201).json(post);
         }   catch (error) {
