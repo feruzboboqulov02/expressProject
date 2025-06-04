@@ -12,8 +12,7 @@ class postController {
     }
     async create(req, res){
         try {
-            const {title, body} = req.body;
-            const post = await postService.create(req.body);
+            const post = await postService.create(req.body,req.files.picture);
             res.status(201).json(post);
         }   catch (error) {
             res.status(500).json({error: "Internal Server Error"});
