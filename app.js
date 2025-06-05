@@ -4,6 +4,10 @@ const postmodel = require('./models/post.model.js');
 require('dotenv').config();
 const fileupload = require('express-fileupload');
 const requestTime = require('./middlewares/request-time');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+
 
 const postRoute = require('./router/post.route.js');
 const app = express();
@@ -13,7 +17,8 @@ app.use(express.json());
 app.use(fileupload({}))
 app.use('/api/post',postRoute)
 app.use(requestTime);
-
+app.use(helmet());
+app.use(morgan('tiny'));
 // app.get("/",)
 
 
