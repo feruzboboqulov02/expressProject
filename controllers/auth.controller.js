@@ -10,12 +10,14 @@ class AuthController{
             console.log(error);
             
         }
-        next();
+        
     }
 
     async activation(req,res,next){
         try {
-            
+            const userId = req.params.id;
+            await authService.activation(userId);
+            res.json({message: "User activated successfully"});
         } catch (error) {
             console.log(error);
             

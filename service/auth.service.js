@@ -14,6 +14,15 @@ class AuthService{
         const userDto = new UserDto(user);
         return {user: userDto};
     } 
+
+    async activation(userId){
+        const user = await userModel.findById(userId);
+        if (!user) {
+            throw new Error(`User with id ${userId} not found`);
+        }
+        user.isActivated = true;
+        await user.save();
+    }
 }
 
 module.exports = new AuthService();
