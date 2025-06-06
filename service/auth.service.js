@@ -32,6 +32,42 @@ class AuthService{
         user.isActivated = true;
         await user.save();
     }
+
+    async login(email,password){
+        const user = await userModel.findOne({ email });
+        if(!user){
+            throw new Error(`User with email ${email} not found`);
+        }
+        const isPassword = await bcrypt.compare(password, user.password);
+        if (!isPassword) {
+            throw new Error('Invalid password');
+        }
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateToken({...userDto});
+        await tokenService.savetoken(userDto.id, tokens.refreshToken);
+        return {user: userDto, ...tokens};
+    }
+
+    async logout(refreshToken){
+        const token = await tokenService.removeToken(refreshToken);
+        return token;
+    }
+
+    async refresh(refreshToken){
+        if(!refreshToken){
+            throw new Error('Refresh token is required');
+        }
+        const userPayload = tokenService.validateRefreshToken(refreshToken);
+        const tokenDb = await tokenService.findToken(refreshToken);
+        if(!userPayload || !tokenDb){
+            throw new Error('Invalid refresh token');
+        }
+        const user = await userModel.findById(userPayload.id);
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateToken({...userDto});
+        await tokenService.savetoken(userDto.id, tokens.refreshToken);
+        return {user: userDto, ...tokens};
+    }
 }
 
 module.exports = new AuthService();
