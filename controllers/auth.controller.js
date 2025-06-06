@@ -1,3 +1,4 @@
+const { max } = require('mathjs');
 const authService = require('../service/auth.service');
 
 class AuthController{
@@ -5,6 +6,7 @@ class AuthController{
         try {
             const {email, password} = req.body;
             const data =  await authService.register(email, password);
+            res.cookie("refreshtoken", data.refreshToken,{httpOnly:true, maxAge: 30 * 24 * 60 * 60 * 1000}); // 30 days
             return res.status(201).json(data);
         } catch (error) {
             console.log(error);
@@ -17,7 +19,7 @@ class AuthController{
         try {
             const userId = req.params.id;
             await authService.activation(userId);
-            res.json({message: "User activated successfully"});
+            return res.redirect('https://sammi.ac')
         } catch (error) {
             console.log(error);
             

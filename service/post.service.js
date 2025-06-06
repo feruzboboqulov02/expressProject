@@ -1,3 +1,4 @@
+const PostDto = require('../dtos/post.dto');
 const postModel = require('../models/post.model');
 const fileService = require('./file.service');
 class PostService{
@@ -22,7 +23,8 @@ class PostService{
     async getOne(id){
         if(!id) throw  new Error("Post ID is required for fetching a single post");
         const post = await postModel.findById(id);
-        return post;
+        const postDto = new PostDto(post);
+        return {post: postDto};
     }
 }
 

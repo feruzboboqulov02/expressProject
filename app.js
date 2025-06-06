@@ -7,12 +7,15 @@ const requestTime = require('./middlewares/request-time');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const authService = require('./service/auth.service.js');
+const cookieParser = require('cookie-parser');
 
 
 const postRoute = require('./routes/post.route.js');
+const { parser } = require('mathjs');
 const app = express();
 
 app.use(express.static('static'))
+app.use(cookieParser({}));
 app.use(express.json());
 app.use(fileupload({}))
 app.use(requestTime);
