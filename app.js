@@ -6,19 +6,21 @@ const fileupload = require('express-fileupload');
 const requestTime = require('./middlewares/request-time');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const authService = require('./service/auth.service.js');
 
 
-
-const postRoute = require('./router/post.route.js');
+const postRoute = require('./routes/post.route.js');
 const app = express();
 
 app.use(express.static('static'))
 app.use(express.json());
 app.use(fileupload({}))
-app.use('/api/post',postRoute)
 app.use(requestTime);
 app.use(helmet());
 app.use(morgan('tiny'));
+app.use('/api/post',postRoute)
+app.use('/api/auth',require('./routes/auth.route.js'));
+
 // app.get("/",)
 
 
