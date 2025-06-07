@@ -26,30 +26,7 @@ app.use('/api/post',require('./routes/post.route.js'));
 app.use('/api/auth',require('./routes/auth.route.js'));
 app.use(errorMiddleware)
 
-// app.get("/",)
 
-
-// app.post("/",async (req,res)=>{
-//     try {
-//         const {title, body} = req.body;
-//         const newPost = await postmodel.create({title, body})
-//         res.status(201).json(newPost);
-//     } catch (error) {
-//         res.status(500).json({error: "Internal Server Error"});
-//     }
-
-// })
-
-// app.delete("/:id",(req,res)=>{
-//     const {id} = req.params;
-//     res.send(`User with id ${id} deleted successfully`);
-// })
-
-// app.put("/:id",(req,res)=>{
-//     const {id} = req.params;
-//     const body = req.body;
-//     res.json({id,body})
-// })
 
 const PORT =process.env.PORT || 8080;
 
