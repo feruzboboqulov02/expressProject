@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 
 const postRoute = require('./routes/post.route.js');
 const { parser } = require('mathjs');
+const errorMiddleware = require('./middlewares/error.middleware.js');
 const app = express();
 
 app.use(express.static('static'))
@@ -21,8 +22,9 @@ app.use(fileupload({}))
 app.use(requestTime);
 app.use(helmet());
 app.use(morgan('tiny'));
-app.use('/api/post',postRoute)
+app.use('/api/post',require('./routes/post.route.js'));
 app.use('/api/auth',require('./routes/auth.route.js'));
+app.use(errorMiddleware)
 
 // app.get("/",)
 

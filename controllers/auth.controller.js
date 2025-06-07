@@ -1,15 +1,21 @@
 const { max } = require('mathjs');
 const authService = require('../service/auth.service');
+const {validationResult} = require('express-validator');
+const BaseError = require('../errors/base.errors');
 
 class AuthController{
     async register(req,res,next){
         try {
             const {email, password} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()){
+                return next(BaseError.BadRequest("Validation error", errors.array()));
+            }
             const data =  await authService.register(email, password);
             res.cookie("refreshtoken", data.refreshToken,{httpOnly:true, maxAge: 30 * 24 * 60 * 60 * 1000}); // 30 days
             return res.status(201).json(data);
         } catch (error) {
-            console.log(error);
+            next(error);
             
         }
         
@@ -21,8 +27,7 @@ class AuthController{
             await authService.activation(userId);
             return res.redirect('https://sammi.ac')
         } catch (error) {
-            console.log(error);
-            
+next(error);            
         }
     }
 
@@ -33,7 +38,7 @@ class AuthController{
             res.cookie("refreshtoken", data.refreshToken,{httpOnly:true, maxAge: 30 * 24 * 60 * 60 * 1000}); // 30 days
             return res.status(201).json(data);
         } catch (error) {
-            console.log(error);
+            next(error);
 
         }
     }
@@ -45,7 +50,7 @@ class AuthController{
             res.clearCookie("refreshtoken");
             return res.status(200).json({token});
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     }
 
@@ -56,7 +61,7 @@ class AuthController{
             res.cookie("refreshtoken", data.refreshToken,{httpOnly:true, maxAge: 30 * 24 * 60 * 60 * 1000}); // 30 days
             return res.status(201).json(data);
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     }
 }
