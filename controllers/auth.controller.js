@@ -25,7 +25,7 @@ class AuthController{
         try {
             const userId = req.params.id;
             await authService.activation(userId);
-            return res.redirect('https://sammi.ac')
+            return res.redirect(process.env.CLIENT_URL);
         } catch (error) {
             next(error);            
         }

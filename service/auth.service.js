@@ -16,7 +16,7 @@ class AuthService{
         const userDto = new UserDto(user);
 
 
-        await mailService.sendMail(email,`${process.env.API_URL}/api/auth/activation/${userDto.id}`,`Activate your account`);
+        await mailSearvice.sendMail(email,`${process.env.API_URL}/api/auth/activation/${userDto.id}`,`Activate your account`);
 
         
 
