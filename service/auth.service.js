@@ -13,7 +13,7 @@ class AuthService{
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const user = await userModel.create({ email, password: hashPassword });
-                const userDto = new UserDto(user);
+        const userDto = new UserDto(user);
 
 
         await mailService.sendMail(email,`${process.env.API_URL}/api/auth/activation/${userDto.id}`,`Activate your account`);

@@ -27,7 +27,7 @@ class AuthController{
             await authService.activation(userId);
             return res.redirect('https://sammi.ac')
         } catch (error) {
-next(error);            
+            next(error);            
         }
     }
 
